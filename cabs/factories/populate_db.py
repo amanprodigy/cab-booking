@@ -22,19 +22,20 @@ def populate_db():
         # create city in this state
         for _ in range(15):
             _city = AddressFactory.createCity(state)
-            logging.info(f"Created city {_city}")
             if _city.name in ['Bangalore', 'Mysore', 'Hyderabad']:
                 # only operating in Bangalore, Mysore and Hyderabad
                 if _city.name not in [c.name for c in OPERATING_CITIES]:
+                    logging.info(f"Added city {_city} in OPERATING_CITIES")
                     OPERATING_CITIES.append(_city)
 
             if _city.name not in [c.name for c in CITIES]:
+                logging.info(f"Added city {_city} in CITIES")
                 CITIES.append(_city)
 
     logging.info('Populating cabs in operating cities...')
     # populate cabs
     for city in OPERATING_CITIES:
-        # Create 10 cabs in each opearting city
+        # Create 10 cabs in each operating city
         for _ in range(50):
             status = random.choice([VehicleStatus.IDLE, VehicleStatus.ON_TRIP])
             cab = VehicleFactory.createVehicle(city, status)

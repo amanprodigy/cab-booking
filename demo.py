@@ -43,17 +43,18 @@ class Demo:
 
     @classmethod
     def show_city_stats(cls, city) -> None:
-        print('----------CABS STATUS --------------')
-        stats = SupplyService.getNumberOfAvailableCabsInCity(city)
-        logging.info(f"Number of idle cars in {city}: {stats}")
-        print('-------------------------------')
+        stats = SupplyService.getStatsOfCabsInCity(city)
+        logging.info(
+            f"{city} cabs status: Idle: {stats[0]}, OnTrip: {stats[1]}")
 
     @classmethod
     def run_booking_demo(cls):
         bangalore = [city for city in CITIES if city.name == 'Bangalore'][0]
         mysore = [city for city in CITIES if city.name == 'Mysore'][0]
         logging.info('Stats before booking...')
+        print('----------CABS STATUS --------------')
         cls.show_city_stats(bangalore)
+        print('----------CABS STATUS --------------')
         bangalore_passengers = [
             p for p in PASSENGESRS if p.getCurrentCity() == bangalore
         ]
@@ -62,7 +63,9 @@ class Demo:
         booking = BookingService.bookVehicle(passenger, bangalore, mysore)
         logging.info(f"Successfully booked cab: {booking}")
         logging.info('Stats after booking...')
+        print('----------CABS STATUS --------------')
         cls.show_city_stats(bangalore)
+        print('----------CABS STATUS --------------')
 
     @classmethod
     def run_demo(cls):

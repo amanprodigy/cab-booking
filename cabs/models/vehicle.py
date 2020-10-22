@@ -30,7 +30,7 @@ class Vehicle(Base):
         self.__year = year
         self.__mileage = mileage
         self.__city = city
-        self.__status = VehicleStatus.IDLE
+        self.__status = status
 
     def getStatus(self):
         return self.__status

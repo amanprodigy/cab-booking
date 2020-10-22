@@ -14,12 +14,15 @@ class SupplyService:
         return None
 
     @classmethod
-    def getNumberOfAvailableCabsInCity(cls, city) -> int:
-        num = 0
+    def getStatsOfCabsInCity(cls, city) -> int:
+        num_idle, num_ontrip = 0, 0
         for cab in CABS:
             if cab.getCurrentCity() == city and cab.isIdle():
-                num += 1
-        return num
+                num_idle += 1
+            if cab.getCurrentCity() == city and cab.getStatus(
+            ) == VehicleStatus.ON_TRIP:
+                num_ontrip += 1
+        return (num_idle, num_ontrip)
 
     @classmethod
     def getTotalStatsAcrossOperatingCities(cls):
