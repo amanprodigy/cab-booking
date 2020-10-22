@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import datetime
 
 from .base import Base
 from .make import Model
@@ -39,6 +40,8 @@ class Vehicle(Base):
         return self.getStatus() == VehicleStatus.IDLE
 
     def updateStatus(self, status: VehicleStatus):
+        # Updating Vehicle History
+        VehicleHistory(self.__status, status)
         self.__status = status
 
     def bookVehicle(self):
@@ -52,3 +55,10 @@ class Vehicle(Base):
 
     def __repr__(self):
         return f"{self.__model} {self.__license_number}"
+
+
+class VehicleHistory:
+    def __init__(self, prev_status: VehicleStatus, new_status: VehicleStatus):
+        self.created_at = datetime.utcnow()
+        self.prev_status = prev_status
+        self.new_status = new_status

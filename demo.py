@@ -1,9 +1,11 @@
 import random
 from logger import logging
+from cabs.models.booking import Booking
 from cabs.models.address import City
 from cabs.models.people import Passenger, Driver
 from cabs.factories.address_factory import AddressFactory
 from cabs.services.booking_service import BookingService
+from cabs.services.trip_service import TripService
 from cabs.services.cab_registration_service import CabRegistrationService
 from cabs.services.city_onboarding_service import CityOnboardingService
 from cabs.services.user_registration_service import UserRegistrationService
@@ -48,7 +50,7 @@ class Demo:
             f"{city} cabs status: Idle: {stats[0]}, OnTrip: {stats[1]}")
 
     @classmethod
-    def run_booking_demo(cls):
+    def run_booking_demo(cls) -> Booking:
         bangalore = [city for city in CITIES if city.name == 'Bangalore'][0]
         mysore = [city for city in CITIES if city.name == 'Mysore'][0]
         logging.info('Stats before booking...')
@@ -66,10 +68,21 @@ class Demo:
         print('----------CABS STATUS --------------')
         cls.show_city_stats(bangalore)
         print('----------CABS STATUS --------------')
+        return booking
+
+    @classmethod
+    def run_trip_demo(cls, booking):
+        forward_trip = TripService.createForwardTrip(booking)
+        TripService.startTrip(forward_trip)
+        TripService.endTrip(forward_trip, 50)
+        cost = TripService.estimateCost(forward_trip)
+        logging.info(
+            f"Estimated cost for the trip {forward_trip} is Rs {cost}")
 
     @classmethod
     def run_demo(cls):
         logging.info('-------- RUNNING DEMO ----------')
         cls.run_passenger_registration_demo()
         cls.run_driver_registration_demo()
-        cls.run_booking_demo()
+        booking = cls.run_booking_demo()
+        cls.run_trip_demo(booking)

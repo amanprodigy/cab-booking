@@ -4,6 +4,7 @@ from ..models.address import City
 from ..models.people import Passenger
 from ..models.booking import Booking
 from ..models.vehicle import Vehicle, VehicleStatus
+from ..models.trips import Trip
 from ..exceptions import CityNotOperationalException, NoCabAvailableException
 from .supply_service import SupplyService
 
@@ -34,3 +35,22 @@ class BookingService:
             raise NoCabAvailableException()
 
         return Booking(passenger, vehicle, origin_city, dest_city)
+
+    def createForwardTrip(self, booking: Booking) -> Trip:
+        return Trip(booking, False)
+
+    def createReturnTrip(self, booking: Booking) -> Trip:
+        return Trip(booking, False)
+
+    def startTrip(self, trip: Trip) -> None:
+        trip.start()
+        logging.info(f"{trip} started")
+
+    def endTrip(self, trip: Trip, distance_km: float) -> None:
+        if not distance_km:
+            raise Exception('Distance travelled required to end trip')
+        trip.end(distance_km)
+        logging.info(f"{trip} ended")
+
+    def estimateCost(self, trip) -> float:
+        return trip.estimateCost()
