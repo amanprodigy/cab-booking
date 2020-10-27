@@ -8,6 +8,9 @@ from ..db import CABS, OPERATING_CITIES
 class SupplyService:
     @classmethod
     def selectVehicle(cls, origin_city: City, dest_city: City) -> Vehicle:
+        '''
+        TODO
+        '''
         for cab in CABS:
             if cab.getCurrentCity() == origin_city and cab.isIdle():
                 return cab
